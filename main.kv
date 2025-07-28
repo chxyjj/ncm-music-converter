@@ -1,0 +1,215 @@
+#:kivy 2.2.0
+#:import MDCard kivymd.uix.card.MDCard
+#:import MDRaisedButton kivymd.uix.button.MDRaisedButton
+#:import MDIconButton kivymd.uix.button.MDIconButton
+#:import MDProgressBar kivymd.uix.progressbar.MDProgressBar
+
+<MainScreen>:
+    name: 'main'
+    md_bg_color: app.theme_cls.bg_light
+    
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: dp(20)
+        padding: dp(20)
+        
+        # 标题栏
+        MDCard:
+            size_hint_y: None
+            height: dp(80)
+            elevation: 3
+            md_bg_color: app.theme_cls.primary_color
+            radius: [15, 15, 15, 15]
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(15)
+                spacing: dp(5)
+                
+                MDLabel:
+                    text: "网易云音乐格式转换器"
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    font_style: "H5"
+                    bold: True
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(35)
+                
+                MDLabel:
+                    text: "made by 陈高君"
+                    theme_text_color: "Custom"
+                    text_color: 0.9, 0.9, 0.9, 1
+                    font_style: "Caption"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(20)
+        
+        # 功能按钮区域
+        MDCard:
+            size_hint_y: None
+            height: dp(200)
+            elevation: 2
+            radius: [10, 10, 10, 10]
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(20)
+                spacing: dp(15)
+                
+                MDLabel:
+                    text: "选择转换方式"
+                    font_style: "H6"
+                    theme_text_color: "Primary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(30)
+                
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    spacing: dp(15)
+                    size_hint_y: None
+                    height: dp(60)
+                    
+                    MDRaisedButton:
+                        id: select_files_btn
+                        text: "选择文件"
+                        icon: "file-music"
+                        theme_icon_color: "Custom"
+                        icon_color: 1, 1, 1, 1
+                        md_bg_color: app.theme_cls.primary_color
+                        size_hint_x: 0.5
+                        on_release: root.select_files()
+                    
+                    MDRaisedButton:
+                        id: scan_all_btn
+                        text: "全盘扫描"
+                        icon: "folder-search"
+                        theme_icon_color: "Custom"
+                        icon_color: 1, 1, 1, 1
+                        md_bg_color: app.theme_cls.accent_color
+                        size_hint_x: 0.5
+                        on_release: root.scan_all_files()
+                
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    spacing: dp(15)
+                    size_hint_y: None
+                    height: dp(60)
+                    
+                    MDRaisedButton:
+                        id: convert_btn
+                        text: "开始转换"
+                        icon: "play-circle"
+                        theme_icon_color: "Custom"
+                        icon_color: 1, 1, 1, 1
+                        md_bg_color: 0.2, 0.7, 0.3, 1
+                        disabled: True
+                        size_hint_x: 0.5
+                        on_release: root.start_conversion()
+                    
+                    MDRaisedButton:
+                        id: clear_btn
+                        text: "清空列表"
+                        icon: "delete"
+                        theme_icon_color: "Custom"
+                        icon_color: 1, 1, 1, 1
+                        md_bg_color: 0.8, 0.3, 0.3, 1
+                        size_hint_x: 0.5
+                        on_release: root.clear_files()
+        
+        # 状态信息区域
+        MDCard:
+            size_hint_y: None
+            height: dp(120)
+            elevation: 2
+            radius: [10, 10, 10, 10]
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(15)
+                spacing: dp(10)
+                
+                MDLabel:
+                    id: status_label
+                    text: "请选择NCM文件或进行全盘扫描"
+                    font_style: "Body1"
+                    theme_text_color: "Primary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(25)
+                
+                MDLabel:
+                    id: file_count_label
+                    text: "已选择文件: 0 个"
+                    font_style: "Body2"
+                    theme_text_color: "Secondary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(20)
+                
+                MDProgressBar:
+                    id: progress_bar
+                    value: 0
+                    size_hint_y: None
+                    height: dp(8)
+                    color: app.theme_cls.primary_color
+                
+                MDLabel:
+                    id: progress_label
+                    text: ""
+                    font_style: "Caption"
+                    theme_text_color: "Secondary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(20)
+        
+        # 文件列表区域
+        MDCard:
+            elevation: 2
+            radius: [10, 10, 10, 10]
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(15)
+                spacing: dp(10)
+                
+                MDLabel:
+                    text: "文件列表"
+                    font_style: "H6"
+                    theme_text_color: "Primary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(30)
+                
+                ScrollView:
+                    MDList:
+                        id: file_list
+                        
+        # 底部信息
+        MDCard:
+            size_hint_y: None
+            height: dp(60)
+            elevation: 1
+            radius: [10, 10, 10, 10]
+            md_bg_color: app.theme_cls.bg_dark
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: dp(10)
+                
+                MDLabel:
+                    text: "NCM → MP3 格式转换器"
+                    font_style: "Caption"
+                    theme_text_color: "Secondary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(15)
+                
+                MDLabel:
+                    text: "支持批量转换，输出到原文件同目录"
+                    font_style: "Caption"
+                    theme_text_color: "Secondary"
+                    halign: "center"
+                    size_hint_y: None
+                    height: dp(15)
